@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>NSS Crtpto题集一 | KBThe0phi1us's blog</title><meta name="author" content="KBThe0phi1us"><meta name="copyright" content="KBThe0phi1us"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="[HGAME 2022 week2]RSA Attack2关键词 task1：共享素数 task2：小明文攻击，直接开根 task3：共模攻击  解决方法12345678910111213141516171819202122232425262728293031from Crypto.Util.number import long_to_bytesfrom gmpy2 import *#task1e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NSS Crtpto题集一">
+<meta property="og:url" content="https://kbthe0phi1us.github.io/2023/02/10/NSS%20Crtpto%E9%A2%98%E9%9B%86%E4%B8%80/index.html">
+<meta property="og:site_name" content="KBThe0phi1us&#39;s blog">
+<meta property="og:description" content="[HGAME 2022 week2]RSA Attack2关键词 task1：共享素数 task2：小明文攻击，直接开根 task3：共模攻击  解决方法12345678910111213141516171819202122232425262728293031from Crypto.Util.number import long_to_bytesfrom gmpy2 import *#task1e">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.vika.cn/space/2023/02/04/cfd97b29c69149828a6b71781c8cc46b">
+<meta property="article:published_time" content="2023-02-10T09:42:12.000Z">
+<meta property="article:modified_time" content="2023-02-10T09:52:59.605Z">
+<meta property="article:author" content="KBThe0phi1us">
+<meta property="article:tag" content="ctf">
+<meta property="article:tag" content="crypto">
+<meta property="article:tag" content="题集">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.vika.cn/space/2023/02/04/cfd97b29c69149828a6b71781c8cc46b"><link rel="shortcut icon" href="https://s1.vika.cn/space/2023/02/05/8bc2037846ab481088ddf95238ee1b14"><link rel="canonical" href="https://kbthe0phi1us.github.io/2023/02/10/NSS%20Crtpto%E9%A2%98%E9%9B%86%E4%B8%80/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":180},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: KBThe0phi1us","link":"链接: ","source":"来源: KBThe0phi1us's blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'NSS Crtpto题集一',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-02-10 17:52:59'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="/css/universe.css"><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s1.vika.cn/space/2023/02/05/8bc2037846ab481088ddf95238ee1b14" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s1.vika.cn/space/2023/02/04/cfd97b29c69149828a6b71781c8cc46b')"><nav id="nav"><span id="blog-info"><a href="/" title="KBThe0phi1us's blog"><span class="site-name">KBThe0phi1us's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">NSS Crtpto题集一</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-10T09:42:12.000Z" title="发表于 2023-02-10 17:42:12">2023-02-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-02-10T09:52:59.605Z" title="更新于 2023-02-10 17:52:59">2023-02-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ctf/">ctf</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ctf/crypto/">crypto</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ctf/crypto/%E7%AC%94%E8%AE%B0/">笔记</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ctf/crypto/%E7%AC%94%E8%AE%B0/%E9%A2%98%E9%9B%86/">题集</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">119</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="NSS Crtpto题集一"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="HGAME-2022-week2-RSA-Attack2"><a href="#HGAME-2022-week2-RSA-Attack2" class="headerlink" title="[HGAME 2022 week2]RSA Attack2"></a>[HGAME 2022 week2]RSA Attack2</h1><h2 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h2><blockquote>
+<p>task1：共享素数</p>
+<p>task2：小明文攻击，直接开根</p>
+<p>task3：共模攻击</p>
+</blockquote>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line"><span class="keyword">from</span> gmpy2 <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment">#task1</span></span><br><span class="line">e1 = <span class="number">65537</span></span><br><span class="line">n1 = <span class="number">14611545605107950827581005165327694782823188603151768169731431418361306231114985037775917461433925308054396970809690804073985835376464629860609710292181368600618626590498491850404503443414241455487304448344892337877422465715709154238653505141605904184985311873763495761345722155289457889686019746663293720106874227323699288277794292208957172446523420596391114891559537811029473150123641624108103676516754449492805126642552751278309634846777636042114135990516245907517377320190091400729277307636724890592155256437996566160995456743018225013851937593886086129131351582958811003596445806061492952513851932238563627194553</span></span><br><span class="line">c1 = <span class="number">965075803554932988664271816439183802328812013694203741320763105376036912584995031647672348468111310423680858101990670067065306237596121664884353679987689532305437801346923070145524106271337770666947677115752724993307387122132705797012726237073550669419110046308257408484535063515678066777681017211510981429273346928022971149411064556225001287399141306136081722471075032423079692908380267160214143720516748000734987068685104675254411687005690312116824966036851568223828884335112144637268090397158532937141122654075952730052331573980701136378212002956719295192733955673315234274064519957670199895100508623561838510479</span></span><br><span class="line">n2 = <span class="number">20937478725109983803079185450449616567464596961348727453817249035110047585580142823551289577145958127121586792878509386085178452171112455890429474457797219202827030884262273061334752493496797935346631509806685589179618367453992749753318273834113016237120686880514110415113673431170488958730203963489455418967544128619234394915820392908422974075932751838012185542968842691824203206517795693893863945100661940988455695923511777306566419373394091907349431686646485516325575494902682337518438042711296437513221448397034813099279203955535025939120139680604495486980765910892438284945450733375156933863150808369796830892363</span></span><br><span class="line">c2 = <span class="number">11536506945313747180442473461658912307154460869003392732178457643224057969838224601059836860883718459986003106970375778443725748607085620938787714081321315817144414115589952237492448483438910378865359239575169326116668030463275817609827626048962304593324479546453471881099976644410889657248346038986836461779780183411686260756776711720577053319504691373550107525296560936467435283812493396486678178020292433365898032597027338876045182743492831814175673834198345337514065596396477709839868387265840430322983945906464646824470437783271607499089791869398590557314713094674208261761299894705772513440948139429011425948090</span></span><br><span class="line">q1 = gcd(n1,n2)</span><br><span class="line">p1 = n1 // q1</span><br><span class="line">d1 = invert(e1,(p1-<span class="number">1</span>)*(q1-<span class="number">1</span>))</span><br><span class="line">m1 = <span class="built_in">pow</span>(c1,d1,n1)</span><br><span class="line"></span><br><span class="line"><span class="comment">#task2</span></span><br><span class="line">e2 = <span class="number">7</span></span><br><span class="line">n3 = <span class="number">14157878492255346300993349653813018105991884577529909522555551468374307942096214964604172734381913051273745228293930832314483466922529240958994897697475939867025561348042725919663546949015024693952641936481841552751484604123097148071800416608762258562797116583678332832015617217745966495992049762530373531163821979627361200921544223578170718741348242012164115593777700903954409103110092921578821048933346893212805071682235575813724113978341592885957767377587492202740185970828629767501662195356276862585025913615910839679860669917255271734413865211340126544199760628445054131661484184876679626946360753009512634349537</span></span><br><span class="line">c3 = <span class="number">10262871020519116406312674685238364023536657841034751572844570983750295909492149101500869806418603732181350082576447594766587572350246675445508931577670158295558641219582729345581697448231116318080456112516700717984731655900726388185866905989088504004805024490513718243036445638662260558477697146032055765285263446084259814560197549018044099935158351931885157616527235283229066145390964094929007056946332051364474528453970904251050605631514869007890625</span></span><br><span class="line">m2 = iroot(c3,e2)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#task3</span></span><br><span class="line">n4 = <span class="number">18819509188106230363444813350468162056164434642729404632983082518225388069544777374544142317612858448345344137372222988033366528086236635213756227816610865045924357232188768913642158448603346330462535696121739622702200540344105464126695432011739181531217582949804939555720700457350512898322376591813135311921904580338340203569582681889243452495363849558955947124975293736509426400460083981078846138740050634906824438689712748324336878791622676974341814691041262280604277357889892211717124319329666052810029131172229930723477981468761369516771720250571713027972064974999802168017946274736383148001865929719248159075729</span></span><br><span class="line">e3 = <span class="number">2519901323</span></span><br><span class="line">c4 = <span class="number">3230779726225544872531441169009307072073754578761888387983403206364548451496736513905460381907928107310030086346589351105809028599650303539607581407627819797944337398601400510560992462455048451326593993595089800150342999021874734748066692962362650540036002073748766509347649818139304363914083879918929873577706323599628031618641793074018304521243460487551364823299685052518852685706687800209505277426869140051056996242882132616256695188870782634310362973153766698286258946896866396670872451803114280846709572779780558482223393759475999103607704510618332253710503857561025613632592682931552228150171423846203875344870</span></span><br><span class="line">e4 = <span class="number">3676335737</span></span><br><span class="line">c5 = <span class="number">940818595622279161439836719641707846790294650888799822335007385854166736459283129434769062995122371073636785371800857633841379139761091890426137981113087519934854663776695944489430385663011713917022574342380155718317794204988626116362865144125136624722782309455452257758808172415884403909840651554485364309237853885251876941477098008690389600544398998669635962495989736021020715396415375890720335697504837045188626103142204474942751410819466379437091569610294575687793060945525108986660851277475079994466474859114092643797418927645726430175928247476884879817034346652560116597965191204061051401916282814886688467861</span></span><br><span class="line"><span class="comment"># 扩展欧几里得算法求出s1,s2的值，满足e1*s1 + e2*s2 = 1</span></span><br><span class="line">_,s1,s2 = gcdext(e3,e4)</span><br><span class="line">m3 = <span class="built_in">pow</span>(c4,s1,n4) * <span class="built_in">pow</span>(c5,s2,n4) % n4</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(long_to_bytes(m1)+long_to_bytes(m2)+long_to_bytes(m3))</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://kbthe0phi1us.github.io">KBThe0phi1us</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://kbthe0phi1us.github.io/2023/02/10/NSS%20Crtpto%E9%A2%98%E9%9B%86%E4%B8%80/">https://kbthe0phi1us.github.io/2023/02/10/NSS Crtpto题集一/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://kbthe0phi1us.github.io" target="_blank">KBThe0phi1us's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ctf/">ctf</a><a class="post-meta__tags" href="/tags/crypto/">crypto</a><a class="post-meta__tags" href="/tags/%E9%A2%98%E9%9B%86/">题集</a></div><div class="post_share"><div class="social-share" data-image="https://s1.vika.cn/space/2023/02/04/cfd97b29c69149828a6b71781c8cc46b" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2023/02/07/NSSRound%207%20Team%20crypto%E7%AF%87%E9%83%A8%E5%88%86wp/" title="NSSRound 7 Team crypto篇部分wp"><img class="cover" src="https://s1.vika.cn/space/2023/02/04/661e2b176c0a4a9fa6460bcf04ebada5" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">NSSRound 7 Team crypto篇部分wp</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/01/11/2023%20hgame%20week1%20Crypto%E7%AF%87wp/" title="2023 hgame week1 Crypto篇wp"><img class="cover" src="https://s1.vika.cn/space/2023/02/04/bbef20ef6ef14a938a0fc9a94cb0d838" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-11</div><div class="title">2023 hgame week1 Crypto篇wp</div></div></a></div><div><a href="/2023/01/21/2023%20hgame%20week2%20Crypto%E7%AF%87wp/" title="2023 hgame week2 Crypto篇部分wp"><img class="cover" src="https://s1.vika.cn/space/2023/02/04/b00e4c8d0ba04da1a55bcdf7075f63a4" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-21</div><div class="title">2023 hgame week2 Crypto篇部分wp</div></div></a></div><div><a href="/2023/02/04/2023%20%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%20crypto%E7%AF%87wp/" title="2023 西湖论剑 crypto篇部分wp"><img class="cover" src="https://s1.vika.cn/space/2023/02/04/95bb541cf54c4545aee7bb5d0894449a" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-04</div><div class="title">2023 西湖论剑 crypto篇部分wp</div></div></a></div><div><a href="/2023/02/07/NSSRound%207%20Team%20crypto%E7%AF%87%E9%83%A8%E5%88%86wp/" title="NSSRound 7 Team crypto篇部分wp"><img class="cover" src="https://s1.vika.cn/space/2023/02/04/661e2b176c0a4a9fa6460bcf04ebada5" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-07</div><div class="title">NSSRound 7 Team crypto篇部分wp</div></div></a></div><div><a href="/2023/01/31/2023%20hgame%20week3%20Crypto%E7%AF%87wp/" title="2023 hgame week2 Crypto篇wp"><img class="cover" src="https://s1.vika.cn/space/2023/02/04/1aac3577bdd943f980debb2e7123e851" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-31</div><div class="title">2023 hgame week2 Crypto篇wp</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s1.vika.cn/space/2023/02/05/8bc2037846ab481088ddf95238ee1b14" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">KBThe0phi1us</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/KBThe0phi1us"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/KBThe0phi1us" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:k2869374743@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HGAME-2022-week2-RSA-Attack2"><span class="toc-number">1.</span> <span class="toc-text">[HGAME 2022 week2]RSA Attack2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%AF%8D"><span class="toc-number">1.1.</span> <span class="toc-text">关键词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">解决方法</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/10/NSS%20Crtpto%E9%A2%98%E9%9B%86%E4%B8%80/" title="NSS Crtpto题集一"><img src="https://s1.vika.cn/space/2023/02/04/cfd97b29c69149828a6b71781c8cc46b" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NSS Crtpto题集一"/></a><div class="content"><a class="title" href="/2023/02/10/NSS%20Crtpto%E9%A2%98%E9%9B%86%E4%B8%80/" title="NSS Crtpto题集一">NSS Crtpto题集一</a><time datetime="2023-02-10T09:42:12.000Z" title="发表于 2023-02-10 17:42:12">2023-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/07/NSSRound%207%20Team%20crypto%E7%AF%87%E9%83%A8%E5%88%86wp/" title="NSSRound 7 Team crypto篇部分wp"><img src="https://s1.vika.cn/space/2023/02/04/661e2b176c0a4a9fa6460bcf04ebada5" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NSSRound 7 Team crypto篇部分wp"/></a><div class="content"><a class="title" href="/2023/02/07/NSSRound%207%20Team%20crypto%E7%AF%87%E9%83%A8%E5%88%86wp/" title="NSSRound 7 Team crypto篇部分wp">NSSRound 7 Team crypto篇部分wp</a><time datetime="2023-02-07T02:42:12.000Z" title="发表于 2023-02-07 10:42:12">2023-02-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/04/2023%20%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%20crypto%E7%AF%87wp/" title="2023 西湖论剑 crypto篇部分wp"><img src="https://s1.vika.cn/space/2023/02/04/95bb541cf54c4545aee7bb5d0894449a" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2023 西湖论剑 crypto篇部分wp"/></a><div class="content"><a class="title" href="/2023/02/04/2023%20%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%20crypto%E7%AF%87wp/" title="2023 西湖论剑 crypto篇部分wp">2023 西湖论剑 crypto篇部分wp</a><time datetime="2023-02-04T13:42:12.000Z" title="发表于 2023-02-04 21:42:12">2023-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/01/31/2023%20hgame%20week3%20Crypto%E7%AF%87wp/" title="2023 hgame week2 Crypto篇wp"><img src="https://s1.vika.cn/space/2023/02/04/1aac3577bdd943f980debb2e7123e851" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2023 hgame week2 Crypto篇wp"/></a><div class="content"><a class="title" href="/2023/01/31/2023%20hgame%20week3%20Crypto%E7%AF%87wp/" title="2023 hgame week2 Crypto篇wp">2023 hgame week2 Crypto篇wp</a><time datetime="2023-01-31T13:42:12.000Z" title="发表于 2023-01-31 21:42:12">2023-01-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/01/21/2023%20hgame%20week2%20Crypto%E7%AF%87wp/" title="2023 hgame week2 Crypto篇部分wp"><img src="https://s1.vika.cn/space/2023/02/04/b00e4c8d0ba04da1a55bcdf7075f63a4" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2023 hgame week2 Crypto篇部分wp"/></a><div class="content"><a class="title" href="/2023/01/21/2023%20hgame%20week2%20Crypto%E7%AF%87wp/" title="2023 hgame week2 Crypto篇部分wp">2023 hgame week2 Crypto篇部分wp</a><time datetime="2023-01-21T13:42:12.000Z" title="发表于 2023-01-21 21:42:12">2023-01-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By KBThe0phi1us</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://kbthe0phi1us.github.io/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button><button id="go-down" type="button" title="直达底部" onclick="btf.scrollToDest(document.body.scrollHeight, 500)"><i class="fas fa-arrow-down"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script defer type="text/javascript" src="https://cdn1.tianli0.top/npm/sweetalert2@8.19.0/dist/sweetalert2.all.js"></script><script defer src="/js/lunar.js"></script><script defer src="/js/day.js"></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script src="/js/sun_moon.js" async></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"left","width":100,"height":200},"mobile":{"show":true},"log":false});</script></body></html>
